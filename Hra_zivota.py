@@ -40,7 +40,13 @@ class HraZivota:
     def update(self):
         for znak, (radek, sloupec) in self.policka_na_update():
             self.hraci_plocha[radek][sloupec] = znak
-    
+
+    def zmen_pole(self, index):
+        x, y = index
+        if self.hraci_plocha[x][y] == False:
+            self.hraci_plocha[x][y] = True
+        else:
+            self.hraci_plocha[x][y] = False
 
 
 
