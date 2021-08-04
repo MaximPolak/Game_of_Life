@@ -1,11 +1,15 @@
 import time
 
-class Hra_zivota:
-    def __init__(self, sirka, vyska):
+class HraZivota:
+    def __init__(self, sirka, vyska, hraci_plocha="nezadano"):
         self.sirka = sirka
         self.vyska = vyska
-        self.hraci_plocha = [[" " for _ in range(self.sirka)] for _ in range(self.vyska)]
-        self.policka_okolo_bunky = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
+        if hraci_plocha == "nezadano":
+            self.hraci_plocha = [[False for _ in range(self.sirka)] for _ in range(self.vyska)]
+        else:
+            self.hraci_plocha = hraci_plocha
+        self.policka_okolo_bunky = tuple((i, j) for i in range(-1, 2) for j in range(-1, 2) if (i, j) != (0, 0))
+        # self.policka_okolo_bunky = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
 
     def indexy(self):
         for radek in range(self.vyska):
@@ -17,40 +21,43 @@ class Hra_zivota:
         for radek, sloupec in self.indexy():
             zive_bunky_okolo = 0
 
-            for pole in self.policka_okolo_bunky:
+            for x, y in self.policka_okolo_bunky:
 
                 try:
-                    if self.hraci_plocha[radek + pole[0]][sloupec + pole[1]] != " ":
+                    if self.hraci_plocha[radek + x][sloupec + y] != False:
                         zive_bunky_okolo += 1
                 except IndexError:
                     pass
 
             aktualni_bunka = self.hraci_plocha[radek][sloupec]
-            if aktualni_bunka == " " and zive_bunky_okolo == 3:
-                policka_na_update.append(("o", (radek, sloupec)))
-            elif aktualni_bunka == "o" and zive_bunky_okolo not in (2, 3):
-                policka_na_update.append((" ", (radek, sloupec)))
+            if aktualni_bunka == False and zive_bunky_okolo == 3:
+                policka_na_update.append((True, (radek, sloupec)))
+            elif aktualni_bunka == True and zive_bunky_okolo not in (2, 3):
+                policka_na_update.append((False, (radek, sloupec)))
 
         return policka_na_update
 
     def update(self):
         for znak, (radek, sloupec) in self.policka_na_update():
             self.hraci_plocha[radek][sloupec] = znak
+    
+
+
 
 """
-hra = Hra_zivota(10, 10)
+hra = HraZivota(10, 10)
 
-hra.hraci_plocha[1][4] = "o"
-hra.hraci_plocha[1][6] = "o"
-hra.hraci_plocha[2][2] = "o"
-hra.hraci_plocha[2][4] = "o"
-hra.hraci_plocha[2][7] = "o"
-hra.hraci_plocha[3][4] = "o"
-hra.hraci_plocha[3][6] = "o"
-hra.hraci_plocha[3][7] = "o"
-hra.hraci_plocha[4][2] = "o"
-hra.hraci_plocha[4][4] = "o"
-hra.hraci_plocha[5][5] = "o"
+hra.hraci_plocha[1][4] = True
+hra.hraci_plocha[1][6] = True
+hra.hraci_plocha[2][2] = True
+hra.hraci_plocha[2][4] = True
+hra.hraci_plocha[2][7] = True
+hra.hraci_plocha[3][4] = True
+hra.hraci_plocha[3][6] = True
+hra.hraci_plocha[3][7] = True
+hra.hraci_plocha[4][2] = True
+hra.hraci_plocha[4][4] = True
+hra.hraci_plocha[5][5] = True
 
 
 while True:
