@@ -47,6 +47,7 @@ class HraZivota:
             self.hraci_plocha[x][y] = True
         else:
             self.hraci_plocha[x][y] = False
+        return self.hraci_plocha[x][y]
 
 
 
