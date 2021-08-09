@@ -1,10 +1,10 @@
 import time
 
 class HraZivota:
-    def __init__(self, sirka, vyska, hraci_plocha="nezadano"):
+    def __init__(self, sirka, vyska, hraci_plocha=None):
         self.sirka = sirka
         self.vyska = vyska
-        if hraci_plocha == "nezadano":
+        if hraci_plocha is None:
             self.hraci_plocha = [[False for _ in range(self.sirka)] for _ in range(self.vyska)]
         else:
             self.hraci_plocha = hraci_plocha
@@ -30,9 +30,9 @@ class HraZivota:
                     pass
 
             aktualni_bunka = self.hraci_plocha[radek][sloupec]
-            if aktualni_bunka == False and zive_bunky_okolo == 3:
+            if not aktualni_bunka and zive_bunky_okolo == 3:
                 policka_na_update.append((True, (radek, sloupec)))
-            elif aktualni_bunka == True and zive_bunky_okolo not in (2, 3):
+            elif aktualni_bunka and zive_bunky_okolo not in (2, 3):
                 policka_na_update.append((False, (radek, sloupec)))
 
         return policka_na_update
@@ -43,13 +43,8 @@ class HraZivota:
 
     def zmen_pole(self, index):
         x, y = index
-        if self.hraci_plocha[x][y] == False:
-            self.hraci_plocha[x][y] = True
-        else:
-            self.hraci_plocha[x][y] = False
+        self.hraci_plocha[x][y] = not self.hraci_plocha[x][y]
         return self.hraci_plocha[x][y]
-
-
 
 """
 hra = HraZivota(10, 10)
